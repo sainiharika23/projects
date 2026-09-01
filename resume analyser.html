@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Résumé Desk 🖇️ — your friendly resume analyzer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:ital,wght@0,400;0,600;0,700;0,800;1,600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper: #fffaf0;
+    --cork: #d8a765;
+    --cork-dark: #c4914f;
+    --ink: #2b2640;
+    --ink-soft: #5b5470;
+    --coral: #ff8b7b;
+    --coral-dark: #ee6e5c;
+    --sage: #6fae7c;
+    --sage-light: #d9f0dd;
+    --butter: #ffd666;
+    --butter-dark: #f0b93e;
+    --lavender: #b8a9e8;
+    --lavender-dark: #9a86d9;
+    --sky: #7fc4d6;
+    --red-soft: #e8746b;
+    --shadow-card: 0 10px 24px rgba(43,38,64,0.16);
+  }
+
+  *{box-sizing:border-box;}
+
+  body{
+    margin:0;
+    font-family:'Nunito', sans-serif;
+    color:var(--ink);
+    background:
+      radial-gradient(circle at 8px 8px, rgba(0,0,0,0.06) 1.4px, transparent 1.6px) 0 0/26px 26px,
+      linear-gradient(160deg, var(--cork) 0%, var(--cork-dark) 100%);
+    min-height:100vh;
+    padding-bottom:80px;
+  }
+
+  h1,h2,h3, .display{
+    font-family:'Baloo 2', cursive;
+    font-weight:700;
+    margin:0;
+  }
+
+  /* ---------- header ---------- */
+  header{
+    padding:56px 24px 36px;
+    text-align:center;
+    position:relative;
+  }
+  .washi{
+    position:absolute;
+    top:18px; left:50%;
+    transform:translateX(-50%) rotate(-2deg);
+    width:220px; height:34px;
+    background:repeating-linear-gradient(45deg, var(--lavender) 0 10px, var(--lavender-dark) 10px 20px);
+    opacity:0.85;
+    border-radius:3px;
+  }
+  header h1{
+    font-size:clamp(2.1rem, 5vw, 3.2rem);
+    color:var(--paper);
+    text-shadow: 3px 3px 0 rgba(43,38,64,0.35);
+    letter-spacing:0.5px;
+  }
+  header p{
+    color: #fff5e2;
+    font-size:1.05rem;
+    max-width:520px;
+    margin:12px auto 0;
+    font-weight:600;
+  }
+
+  .desk{
+    max-width:960px;
+    margin:0 auto;
+    padding:0 20px;
+  }
+
+  /* ---------- generic sticky-note card ---------- */
+  .note{
+    background:var(--paper);
+    border-radius:14px;
+    box-shadow:var(--shadow-card);
+    padding:26px 28px;
+    position:relative;
+    margin-bottom:34px;
+  }
+  .pin{
+    position:absolute;
+    top:-14px; left:28px;
+    width:26px; height:26px;
+    border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, #ff9d90, var(--coral-dark));
+    box-shadow:0 3px 5px rgba(0,0,0,0.35);
+    border:2px solid rgba(255,255,255,0.5);
+  }
+  .note h2{
+    font-size:1.35rem;
+    color:var(--ink);
+    margin-bottom:4px;
+  }
+  .note .sub{
+    color:var(--ink-soft);
+    font-weight:600;
+    font-size:0.92rem;
+    margin-bottom:18px;
+  }
+
+  /* ---------- input note ---------- */
+  #inputNote{ transform:rotate(-0.4deg); }
+  textarea{
+    width:100%;
+    min-height:220px;
+    resize:vertical;
+    border:2px dashed #e3d7bd;
+    border-radius:10px;
+    padding:16px;
+    font-family:'Nunito', sans-serif;
+    font-size:0.98rem;
+    color:var(--ink);
+    background:#fffdf7;
+    outline:none;
+    transition:border-color 0.2s;
+  }
+  textarea:focus{ border-color:var(--coral); }
+
+  .input-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:12px;
+    align-items:center;
+    margin-top:16px;
+  }
+
+  .file-btn{
+    display:inline-flex; align-items:center; gap:8px;
+    background:var(--sky);
+    color:#0d3a44;
+    font-weight:800;
+    font-family:'Baloo 2', cursive;
+    padding:10px 18px;
+    border-radius:30px;
+    cursor:pointer;
+    border:none;
+    font-size:0.92rem;
+    box-shadow:0 4px 0 #4f8f9e;
+    transition:transform 0.08s;
+  }
+  .file-btn:active{ transform:translateY(3px); box-shadow:0 1px 0 #4f8f9e; }
+  #fileInput{ display:none; }
+  #fileName{ font-size:0.85rem; color:var(--ink-soft); font-weight:700; }
+
+  .role-picker{ margin-top:20px; }
+  .role-picker .label{ font-weight:800; font-family:'Baloo 2',cursive; margin-bottom:8px; display:block; color:var(--ink); }
+  .chips{ display:flex; flex-wrap:wrap; gap:8px; }
+  .chip{
+    padding:8px 14px;
+    border-radius:20px;
+    background:#f4ecd8;
+    border:2px solid transparent;
+    font-weight:700;
+    font-size:0.85rem;
+    cursor:pointer;
+    color:var(--ink-soft);
+    transition:all 0.15s;
+  }
+  .chip:hover{ background:#eee0bd; }
+  .chip.active{
+    background:var(--butter);
+    border-color:var(--butter-dark);
+    color:var(--ink);
+  }
+
+  .analyze-btn{
+    display:block;
+    margin:26px auto 0;
+    background:var(--coral);
+    color:#fff;
+    font-family:'Baloo 2', cursive;
+    font-size:1.15rem;
+    font-weight:700;
+    padding:14px 40px;
+    border-radius:40px;
+    border:none;
+    cursor:pointer;
+    box-shadow:0 6px 0 var(--coral-dark);
+    transition:transform 0.08s;
+  }
+  .analyze-btn:active{ transform:translateY(4px); box-shadow:0 2px 0 var(--coral-dark); }
+  .analyze-btn:disabled{ opacity:0.5; cursor:not-allowed; }
+
+  #sampleLink{
+    display:block;
+    text-align:center;
+    margin-top:12px;
+    color:#fff5e2;
+    font-weight:700;
+    font-size:0.85rem;
+    text-decoration:underline;
+    cursor:pointer;
+  }
+
+  /* ---------- results ---------- */
+  #results{ display:none; }
+  #results.show{ display:block; animation:riseIn 0.5s ease; }
+  @keyframes riseIn{ from{opacity:0; transform:translateY(16px);} to{opacity:1; transform:translateY(0);} }
+
+  .grid2{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:28px;
+  }
+  @media (max-width:760px){ .grid2{ grid-template-columns:1fr; } }
+
+  /* score badge */
+  #scoreNote{ text-align:center; transform:rotate(0.6deg); }
+  .badge-wrap{ position:relative; width:190px; height:190px; margin:8px auto 6px; }
+  .badge-num{
+    position:absolute; inset:0;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+  }
+  .badge-num .n{ font-family:'Baloo 2',cursive; font-size:3rem; font-weight:800; color:var(--ink); line-height:1; }
+  .badge-num .lbl{ font-size:0.72rem; font-weight:800; color:var(--ink-soft); letter-spacing:0.5px; margin-top:2px; }
+  .score-verdict{
+    margin-top:10px;
+    display:inline-block;
+    padding:6px 18px;
+    border-radius:20px;
+    font-family:'Baloo 2',cursive;
+    font-weight:700;
+    font-size:0.95rem;
+  }
+
+  /* ATS checklist */
+  .ats-item{
+    display:flex; align-items:center; gap:10px;
+    padding:9px 0;
+    border-bottom:1px dashed #ece2ca;
+    font-weight:700;
+    font-size:0.92rem;
+  }
+  .ats-item:last-child{ border-bottom:none; }
+  .ats-icon{
+    width:26px; height:26px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-size:0.85rem; flex-shrink:0; color:#fff;
+  }
+  .ats-icon.pass{ background:var(--sage); }
+  .ats-icon.fail{ background:var(--red-soft); }
+
+  /* skill pills */
+  .pill-group{ margin-bottom:14px; }
+  .pill-group .cat{ font-size:0.78rem; font-weight:800; color:var(--ink-soft); text-transform:none; margin-bottom:7px; }
+  .pills{ display:flex; flex-wrap:wrap; gap:7px; }
+  .pill{
+    padding:6px 13px;
+    border-radius:16px;
+    font-weight:700;
+    font-size:0.82rem;
+    background:var(--sage-light);
+    color:#1e5c2e;
+    border:1.5px solid #b6dfbe;
+  }
+  .empty-note{ color:var(--ink-soft); font-weight:600; font-size:0.9rem; font-style:italic; }
+
+  /* missing keywords */
+  .missing-pill{
+    padding:6px 13px;
+    border-radius:16px;
+    font-weight:700;
+    font-size:0.82rem;
+    background:#fdeeee;
+    color:#a8332b;
+    border:1.5px solid #f4c6c1;
+    display:inline-block;
+    margin:0 7px 7px 0;
+    position:relative;
+  }
+  .highlight-strip{
+    height:6px; width:100%;
+    background:linear-gradient(90deg, var(--butter), transparent);
+    margin-bottom:14px; border-radius:3px;
+    opacity:0.7;
+  }
+
+  /* role matching */
+  .role-row{ margin-bottom:14px; }
+  .role-row .top{ display:flex; justify-content:space-between; font-weight:800; font-size:0.9rem; margin-bottom:5px; }
+  .bar-track{ width:100%; height:14px; background:#f0e7d2; border-radius:8px; overflow:hidden; }
+  .bar-fill{ height:100%; border-radius:8px; background:linear-gradient(90deg, var(--lavender), var(--lavender-dark)); transition:width 0.8s ease; width:0%; }
+  .role-row.best .bar-fill{ background:linear-gradient(90deg, var(--sage), #4f9660); }
+  .role-row.best .top{ color:#215c30; }
+  .best-tag{ background:var(--sage); color:#fff; font-size:0.65rem; padding:2px 8px; border-radius:10px; margin-left:6px; vertical-align:middle; }
+
+  /* suggestions */
+  #suggestNote{ transform:rotate(-0.3deg); }
+  .suggestion{
+    display:flex; gap:12px; align-items:flex-start;
+    padding:12px 0;
+    border-bottom:1px dashed #ece2ca;
+  }
+  .suggestion:last-child{ border-bottom:none; }
+  .suggestion .icon{ font-size:1.3rem; flex-shrink:0; }
+  .suggestion .txt{ font-weight:600; font-size:0.94rem; line-height:1.45; }
+  .suggestion .txt b{ color:var(--coral-dark); }
+
+  /* full width note */
+  .full{ grid-column:1 / -1; }
+
+  footer{
+    text-align:center;
+    color:#fff5e2;
+    font-weight:700;
+    font-size:0.82rem;
+    margin-top:40px;
+    padding:0 20px;
+    opacity:0.9;
+  }
+  footer a{ color:#fff; }
+
+  /* loading paperclip spinner */
+  .spin{
+    display:inline-block; animation:spin 1s linear infinite;
+  }
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="washi"></div>
+  <h1>📌 Résumé Desk</h1>
+  <p>Paste your résumé, pick the role you're chasing, and get a friendly, sticky-note-style breakdown of how it stacks up.</p>
+</header>
+
+<div class="desk">
+
+  <!-- INPUT -->
+  <div class="note" id="inputNote">
+    <div class="pin"></div>
+    <h2>1. Drop your résumé here ✂️</h2>
+    <div class="sub">Paste the text, or upload a .txt, .pdf, or .docx file</div>
+
+    <textarea id="resumeText" placeholder="Paste your résumé content here...
+
+e.g.
+Jane Doe
+jane.doe@email.com | (555) 123-4567
+
+SUMMARY
+Data-driven analyst with 3 years of experience...
+
+EXPERIENCE
+- Built dashboards in Tableau that increased reporting speed by 40%
+- Led a team of 4 analysts...
+
+SKILLS
+Python, SQL, Pandas, Tableau, Communication"></textarea>
+
+    <div class="input-row">
+      <label class="file-btn" for="fileInput">📎 Upload file <input type="file" id="fileInput" accept=".txt,.pdf,.docx"></label>
+      <span id="fileName"></span>
+    </div>
+
+    <div class="role-picker">
+      <span class="label">2. Which role are you aiming for? 🎯</span>
+      <div class="chips" id="roleChips"></div>
+    </div>
+
+    <button class="analyze-btn" id="analyzeBtn">🔍 Analyze my résumé</button>
+    <span id="sampleLink">✨ or try it with a sample résumé</span>
+  </div>
+
+  <!-- RESULTS -->
+  <div id="results">
+
+    <div class="grid2">
+      <!-- SCORE -->
+      <div class="note" id="scoreNote">
+        <div class="pin" style="background:radial-gradient(circle at 35% 30%, #ffe08a, var(--butter-dark));"></div>
+        <h2>Résumé Score</h2>
+        <div class="sub">A snapshot of overall strength</div>
+        <div class="badge-wrap">
+          <svg viewBox="0 0 190 190" width="190" height="190">
+            <circle cx="95" cy="95" r="82" fill="none" stroke="#f0e7d2" stroke-width="16"/>
+            <circle id="scoreRing" cx="95" cy="95" r="82" fill="none" stroke="var(--coral)" stroke-width="16"
+              stroke-linecap="round" stroke-dasharray="515.2" stroke-dashoffset="515.2"
+              transform="rotate(-90 95 95)"/>
+          </svg>
+          <div class="badge-num">
+            <span class="n" id="scoreNum">0</span>
+            <span class="lbl">OUT OF 100</span>
+          </div>
+        </div>
+        <div id="scoreVerdict" class="score-verdict"></div>
+      </div>
+
+      <!-- ATS -->
+      <div class="note" id="atsNote">
+        <div class="pin" style="background:radial-gradient(circle at 35% 30%, #a9e6b4, var(--sage));"></div>
+        <h2>ATS Compatibility</h2>
+        <div class="sub">Will a bot be able to read this?</div>
+        <div id="atsList"></div>
+      </div>
+    </div>
+
+    <div class="grid2">
+      <!-- SKILLS -->
+      <div class="note" id="skillsNote">
+        <div class="pin" style="background:radial-gradient(circle at 35% 30%, #cfc0f7, var(--lavender));"></div>
+        <h2>Skills We Found 🧩</h2>
+        <div class="sub">Extracted straight from your résumé</div>
+        <div id="skillsList"></div>
+      </div>
+
+      <!-- MISSING KEYWORDS -->
+      <div class="note" id="missingNote">
+        <div class="pin" style="background:radial-gradient(circle at 35% 30%, #ffb3a8, var(--coral));"></div>
+        <h2>Missing Keywords 🖍️</h2>
+        <div class="sub" id="missingSub">Compared against your target role</div>
+        <div class="highlight-strip"></div>
+        <div id="missingList"></div>
+      </div>
+    </div>
+
+    <!-- ROLE MATCH -->
+    <div class="note full" id="matchNote">
+      <div class="pin" style="background:radial-gradient(circle at 35% 30%, #8fd7e8, var(--sky));"></div>
+      <h2>Job-Role Matching 🎯</h2>
+      <div class="sub">How well your résumé fits different roles</div>
+      <div id="matchList"></div>
+    </div>
+
+    <!-- SUGGESTIONS -->
+    <div class="note full" id="suggestNote">
+      <div class="pin" style="background:radial-gradient(circle at 35% 30%, #ffe08a, var(--butter-dark));"></div>
+      <h2>Improvement Suggestions 💡</h2>
+      <div class="sub">Small edits, bigger impact</div>
+      <div id="suggestList"></div>
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  Made with 🖇️ for your job hunt — everything runs locally in your browser, nothing is uploaded anywhere.
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+<script>
+/* =========================================================
+   DATA: skills dictionary & job role keyword sets
+   ========================================================= */
+const SKILL_CATEGORIES = {
+  "Languages": ["Python","JavaScript","TypeScript","Java","C\\+\\+","C#","SQL","R","Go","Ruby","Swift","PHP","Kotlin","HTML","CSS","Scala","MATLAB"],
+  "Frameworks & Libraries": ["React","Angular","Vue","Node\\.js","Django","Flask","Spring","TensorFlow","PyTorch","Scikit-learn","Pandas","NumPy","Keras","Express","Next\\.js","jQuery","Bootstrap","Tailwind"],
+  "Tools & Platforms": ["Git","Docker","Kubernetes","AWS","Azure","GCP","Jenkins","Jira","Figma","Tableau","Power BI","Excel","Linux","MongoDB","PostgreSQL","MySQL","Redis","GraphQL","REST API","Terraform","Adobe XD"],
+  "Soft Skills": ["Communication","Leadership","Teamwork","Problem Solving","Collaboration","Time Management","Adaptability","Critical Thinking","Presentation","Mentoring","Stakeholder Management"]
+};
+
+const JOB_ROLES = {
+
+  // 🤖 DATA & AI
+  "Data Scientist": [
+    "Python", "SQL", "Pandas", "NumPy", "Scikit-learn",
+    "TensorFlow", "Machine Learning", "Statistics",
+    "Tableau", "Power BI", "R", "Data Visualization"
+  ],
+
+  "Data Analyst": [
+    "SQL", "Excel", "Tableau", "Power BI", "Python",
+    "R", "Data Visualization", "Statistics", "Pandas"
+  ],
+
+  "Data Engineer": [
+    "Python", "SQL", "ETL", "Apache Spark", "Hadoop",
+    "Airflow", "AWS", "Azure", "GCP", "Docker",
+    "PostgreSQL", "MongoDB"
+  ],
+
+  "ML Engineer": [
+    "Python", "TensorFlow", "PyTorch", "Scikit-learn",
+    "Docker", "Kubernetes", "AWS", "MLOps",
+    "SQL", "Machine Learning"
+  ],
+
+  "AI Engineer": [
+    "Python", "Machine Learning", "Deep Learning",
+    "TensorFlow", "PyTorch", "LLM", "NLP",
+    "Computer Vision", "APIs", "Docker"
+  ],
+
+  "NLP Engineer": [
+    "Python", "NLP", "Transformers", "BERT",
+    "LLM", "PyTorch", "TensorFlow",
+    "Hugging Face", "Machine Learning"
+  ],
+
+  "Computer Vision Engineer": [
+    "Python", "OpenCV", "TensorFlow", "PyTorch",
+    "Deep Learning", "CNN", "Image Processing"
+  ],
+
+
+  // 💻 SOFTWARE DEVELOPMENT
+  "Frontend Developer": [
+    "HTML", "CSS", "JavaScript", "TypeScript",
+    "React", "Angular", "Vue", "Tailwind",
+    "Bootstrap", "Git", "Figma", "REST API"
+  ],
+
+  "Backend Developer": [
+    "Python", "Java", "Node.js", "Django",
+    "Flask", "Spring", "SQL", "MongoDB",
+    "PostgreSQL", "REST API", "Docker", "AWS"
+  ],
+
+  "Full Stack Developer": [
+    "HTML", "CSS", "JavaScript", "React",
+    "Node.js", "Express", "MongoDB",
+    "SQL", "REST API", "Git", "Docker"
+  ],
+
+  "Software Engineer": [
+    "Python", "Java", "C++", "JavaScript",
+    "Data Structures", "Algorithms", "Git",
+    "SQL", "OOP", "Problem Solving"
+  ],
+
+  "Mobile App Developer": [
+    "JavaScript", "React Native", "Flutter",
+    "Dart", "Java", "Kotlin", "Android",
+    "iOS", "REST API", "Firebase"
+  ],
+
+  "QA Engineer": [
+    "Testing", "Selenium", "JUnit", "PyTest",
+    "Automation Testing", "API Testing",
+    "Jira", "Git", "Java", "Python"
+  ],
+
+
+  // ☁️ CLOUD & DEVOPS
+  "DevOps Engineer": [
+    "Docker", "Kubernetes", "AWS", "Azure",
+    "GCP", "Jenkins", "Linux", "Git",
+    "CI/CD", "Terraform"
+  ],
+
+  "Cloud Engineer": [
+    "AWS", "Azure", "GCP", "Docker",
+    "Kubernetes", "Linux", "Terraform",
+    "Networking", "Python"
+  ],
+
+  "Cybersecurity Analyst": [
+    "Cybersecurity", "Networking", "Linux",
+    "Python", "Firewalls", "SIEM",
+    "Penetration Testing", "Wireshark"
+  ],
+
+
+  // 🎨 DESIGN
+  "UI Designer": [
+    "Figma", "Adobe XD", "Wireframing",
+    "Prototyping", "UI Design",
+    "Design Systems", "Typography"
+  ],
+
+  "UX Designer": [
+    "Figma", "Prototyping", "User Research",
+    "Wireframing", "Communication",
+    "Adobe XD", "Usability Testing"
+  ],
+
+  "UX Researcher": [
+    "User Research", "Usability Testing",
+    "Interviews", "Surveys", "Figma",
+    "Data Analysis", "Communication"
+  ],
+
+  "Product Designer": [
+    "Figma", "UI Design", "UX Design",
+    "Prototyping", "Wireframing",
+    "Design Thinking", "User Research"
+  ],
+
+
+  // 📊 PRODUCT & BUSINESS
+  "Product Manager": [
+    "Communication", "Leadership", "Jira",
+    "Roadmapping", "Stakeholder Management",
+    "Agile", "Presentation", "Critical Thinking"
+  ],
+
+  "Business Analyst": [
+    "SQL", "Excel", "Power BI",
+    "Tableau", "Communication",
+    "Requirement Gathering",
+    "Data Analysis", "Jira"
+  ],
+
+  "Project Manager": [
+    "Leadership", "Communication",
+    "Agile", "Scrum", "Jira",
+    "Risk Management",
+    "Stakeholder Management"
+  ],
+
+  "Financial Analyst": [
+    "Excel", "Financial Modeling",
+    "SQL", "Python", "Power BI",
+    "Statistics", "Data Analysis"
+  ],
+
+
+  // 🚀 EMERGING TECHNOLOGIES
+  "Blockchain Developer": [
+    "Blockchain", "Solidity", "Ethereum",
+    "Smart Contracts", "JavaScript",
+    "Web3", "Cryptography"
+  ],
+
+  "Game Developer": [
+    "Unity", "C#", "C++",
+    "Game Design", "Unreal Engine",
+    "3D Graphics"
+  ],
+
+  "AR/VR Developer": [
+    "Unity", "C#", "Unreal Engine",
+    "AR", "VR", "3D Modeling"
+  ],
+
+  "IoT Engineer": [
+    "Arduino", "Raspberry Pi",
+    "ESP32", "Python", "C++",
+    "Sensors", "MQTT", "Embedded Systems"
+  ],
+
+  "Solutions Architect": [
+    "AWS", "Azure", "GCP",
+    "System Design", "Docker",
+    "Kubernetes", "Microservices",
+    "Networking"
+  ]
+};
+
+const ALL_SKILLS = [...new Set(Object.values(SKILL_CATEGORIES).flat())];
+
+const SAMPLE_RESUME = `Jane Doe
+jane.doe@email.com | (555) 123-4567 | linkedin.com/in/janedoe
+
+SUMMARY
+Data-driven analyst with 3 years of experience turning messy datasets into decisions.
+
+EXPERIENCE
+Data Analyst, Northwind Retail — 2022 to Present
+- Built dashboards in Tableau that reduced reporting time by 40%
+- Automated a Python + SQL pipeline processing 2M+ rows weekly
+- Partnered with stakeholders across 5 departments to define KPIs
+
+EDUCATION
+B.S. in Statistics, State University — 2021
+
+SKILLS
+Python, SQL, Pandas, Tableau, Excel, Communication, Problem Solving`;
+
+/* =========================================================
+   STATE
+   ========================================================= */
+let selectedRole = "Data Scientist";
+
+/* build role chips */
+const chipWrap = document.getElementById('roleChips');
+Object.keys(JOB_ROLES).forEach(role => {
+  const chip = document.createElement('div');
+  chip.className = 'chip' + (role === selectedRole ? ' active' : '');
+  chip.textContent = role;
+  chip.onclick = () => {
+    selectedRole = role;
+    document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+    chip.classList.add('active');
+  };
+  chipWrap.appendChild(chip);
+});
+
+document.getElementById('sampleLink').onclick = () => {
+  document.getElementById('resumeText').value = SAMPLE_RESUME;
+};
+
+/* =========================================================
+   FILE HANDLING
+   ========================================================= */
+const fileInput = document.getElementById('fileInput');
+const fileNameEl = document.getElementById('fileName');
+
+fileInput.addEventListener('change', async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  fileNameEl.textContent = "Reading " + file.name + "...";
+  try {
+    let text = "";
+    if (file.name.endsWith('.txt')) {
+      text = await file.text();
+    } else if (file.name.endsWith('.pdf')) {
+      text = await extractPdfText(file);
+    } else if (file.name.endsWith('.docx')) {
+      text = await extractDocxText(file);
+    } else {
+      text = await file.text();
+    }
+    document.getElementById('resumeText').value = text;
+    fileNameEl.textContent = "✅ Loaded " + file.name;
+  } catch (err) {
+    fileNameEl.textContent = "⚠️ Couldn't read that file — try pasting the text instead.";
+    console.error(err);
+  }
+});
+
+async function extractPdfText(file) {
+  const buf = await file.arrayBuffer();
+  pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+  const pdf = await pdfjsLib.getDocument({data: buf}).promise;
+  let full = "";
+  for (let i = 1; i <= pdf.numPages; i++) {
+    const page = await pdf.getPage(i);
+    const content = await page.getTextContent();
+    full += content.items.map(it => it.str).join(" ") + "\n";
+  }
+  return full;
+}
+
+async function extractDocxText(file) {
+  const buf = await file.arrayBuffer();
+  const result = await mammoth.extractRawText({arrayBuffer: buf});
+  return result.value;
+}
+
+/* =========================================================
+   ANALYSIS
+   ========================================================= */
+function escapeRegex(str){ return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
+
+function findMatches(text, terms){
+  const found = [];
+  terms.forEach(term => {
+    const pattern = term.replace(/\\\+/g,'\\+').replace(/ /g,'\\s+');
+    const re = new RegExp('(?:^|[^a-zA-Z])' + pattern.replace(/\\/g,'\\') + '(?:$|[^a-zA-Z])', 'i');
+    // simpler robust check: word-boundary-ish using lowercase includes for reliability
+    const plain = term.replace(/\\/g,'');
+    const lc = text.toLowerCase();
+    const needle = plain.toLowerCase();
+    const idx = lc.indexOf(needle);
+    if (idx !== -1) {
+      const before = idx === 0 ? ' ' : lc[idx-1];
+      const after = idx+needle.length >= lc.length ? ' ' : lc[idx+needle.length];
+      const boundaryOk = !/[a-z0-9]/.test(before) && !/[a-z0-9]/.test(after);
+      if (boundaryOk) found.push(plain);
+    }
+  });
+  return found;
+}
+
+function analyze(text){
+  const wordCount = text.trim().split(/\s+/).filter(Boolean).length;
+  const lower = text.toLowerCase();
+
+  // --- skill extraction ---
+  const foundByCategory = {};
+  let totalFound = [];
+  Object.entries(SKILL_CATEGORIES).forEach(([cat, list]) => {
+    const found = findMatches(text, list);
+    foundByCategory[cat] = found;
+    totalFound = totalFound.concat(found);
+  });
+
+  // --- ATS checks ---
+  const hasEmail = /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}/i.test(text);
+  const hasPhone = /(\+?\d{1,3}[\s.-]?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}/.test(text);
+  const hasExperienceSection = /experience|employment|work history/i.test(text);
+  const hasEducationSection = /education|academic/i.test(text);
+  const hasSkillsSection = /skills|technologies|competenc/i.test(text);
+  const hasBullets = /(^|\n)\s*[-•\u2022\*]/.test(text);
+  const goodLength = wordCount >= 150 && wordCount <= 900;
+  const hasQuantifiedResults = /\d+%|\$\d+|\b\d+[km]?\+?\s*(users|clients|projects|people|sales|revenue|hours|rows|records)\b/i.test(text);
+
+  const atsChecks = [
+    {label:"Email address found", pass:hasEmail},
+    {label:"Phone number found", pass:hasPhone},
+    {label:"Experience section present", pass:hasExperienceSection},
+    {label:"Education section present", pass:hasEducationSection},
+    {label:"Skills section present", pass:hasSkillsSection},
+    {label:"Uses bullet points", pass:hasBullets},
+    {label:"Ideal length (150–900 words)", pass:goodLength},
+    {label:"Includes quantified results", pass:hasQuantifiedResults},
+  ];
+  const atsPassCount = atsChecks.filter(c => c.pass).length;
+
+  // --- role matching ---
+  const roleScores = {};
+  Object.entries(JOB_ROLES).forEach(([role, keywords]) => {
+    const matched = findMatches(text, keywords);
+    roleScores[role] = {
+      matched,
+      missing: keywords.filter(k => !matched.includes(k)),
+      pct: Math.round((matched.length / keywords.length) * 100)
+    };
+  });
+  const sortedRoles = Object.entries(roleScores).sort((a,b) => b[1].pct - a[1].pct);
+  const bestRole = sortedRoles[0][0];
+
+  const targetData = roleScores[selectedRole];
+
+  // --- overall score (weighted composite) ---
+  const atsScore = (atsPassCount / atsChecks.length) * 40; // 40 pts
+  const skillScore = Math.min(totalFound.length / 12, 1) * 25; // 25 pts
+  const matchScore = (targetData.pct / 100) * 25; // 25 pts
+  const lengthBonus = goodLength ? 10 : 4; // 10 pts
+  const overall = Math.round(atsScore + skillScore + matchScore + lengthBonus);
+  const finalScore = Math.max(0, Math.min(100, overall));
+
+  // --- suggestions ---
+  const suggestions = [];
+  if (!hasEmail) suggestions.push({icon:"📧", txt:"Add a clear <b>email address</b> near the top — some ATS systems reject résumés without one."});
+  if (!hasPhone) suggestions.push({icon:"📱", txt:"Add a <b>phone number</b> so recruiters can reach you directly."});
+  if (!hasExperienceSection) suggestions.push({icon:"🗂️", txt:"Add a clearly labeled <b>Experience</b> section — ATS bots look for standard headers."});
+  if (!hasSkillsSection) suggestions.push({icon:"🧩", txt:"Add a dedicated <b>Skills</b> section listing your key tools and technologies."});
+  if (!hasBullets) suggestions.push({icon:"•", txt:"Format your experience with <b>bullet points</b> instead of paragraphs — easier to scan."});
+  if (!hasQuantifiedResults) suggestions.push({icon:"📈", txt:"Quantify your impact — swap \"improved reporting\" for \"<b>cut reporting time by 40%</b>\"."});
+  if (wordCount < 150) suggestions.push({icon:"✏️", txt:"Your résumé looks thin — add more detail about your projects and responsibilities."});
+  if (wordCount > 900) suggestions.push({icon:"✂️", txt:"Your résumé is on the longer side — aim to trim it to fit 1–2 pages."});
+  if (targetData.missing.length > 0) {
+    suggestions.push({icon:"🔑", txt:`For <b>${selectedRole}</b> roles, consider adding: <b>${targetData.missing.slice(0,4).join(", ")}</b>.`});
+  }
+  if (totalFound.length < 5) suggestions.push({icon:"🧠", txt:"List more relevant technical skills — aim for at least 6–8 tools or languages."});
+  if (bestRole !== selectedRole && roleScores[bestRole].pct - targetData.pct >= 20) {
+    suggestions.push({icon:"🔀", txt:`Your résumé currently reads closer to a <b>${bestRole}</b> profile than ${selectedRole}. That's fine if intentional — otherwise, lean more into ${selectedRole}-specific keywords.`});
+  }
+  if (suggestions.length === 0) suggestions.push({icon:"🎉", txt:"Nice work — your résumé covers the essentials well! Keep tailoring keywords per job posting for the best results."});
+
+  return {
+    wordCount, foundByCategory, totalFound, atsChecks, atsPassCount,
+    roleScores, sortedRoles, bestRole, targetData, finalScore, suggestions
+  };
+}
+
+/* =========================================================
+   RENDER
+   ========================================================= */
+function renderScore(score){
+  const circumference = 2 * Math.PI * 82;
+  const ring = document.getElementById('scoreRing');
+  const offset = circumference - (score/100)*circumference;
+
+  let color = "var(--coral)", verdictText = "Needs work", verdictBg="#fdeeee", verdictColor="#a8332b";
+  if (score >= 80){ color="var(--sage)"; verdictText="Excellent ✨"; verdictBg="var(--sage-light)"; verdictColor="#1e5c2e"; }
+  else if (score >= 60){ color="var(--butter-dark)"; verdictText="Pretty solid 👍"; verdictBg="#fff6db"; verdictColor="#8a6100"; }
+  else if (score >= 40){ color="var(--coral)"; verdictText="Getting there 🌱"; verdictBg="#ffece7"; verdictColor="#b1502f"; }
+
+  ring.style.stroke = color;
+
+  const numEl = document.getElementById('scoreNum');
+  let current = 0;
+  const step = Math.max(1, Math.round(score/40));
+  const timer = setInterval(() => {
+    current += step;
+    if (current >= score){ current = score; clearInterval(timer); }
+    numEl.textContent = current;
+  }, 20);
+  ring.style.strokeDashoffset = offset;
+
+  const verdict = document.getElementById('scoreVerdict');
+  verdict.textContent = verdictText;
+  verdict.style.background = verdictBg;
+  verdict.style.color = verdictColor;
+}
+
+function renderATS(checks){
+  const list = document.getElementById('atsList');
+  list.innerHTML = "";
+  checks.forEach(c => {
+    const row = document.createElement('div');
+    row.className = 'ats-item';
+    row.innerHTML = `<span class="ats-icon ${c.pass ? 'pass':'fail'}">${c.pass ? '✓':'✕'}</span><span>${c.label}</span>`;
+    list.appendChild(row);
+  });
+}
+
+function renderSkills(foundByCategory, totalCount){
+  const wrap = document.getElementById('skillsList');
+  wrap.innerHTML = "";
+  if (totalCount === 0){
+    wrap.innerHTML = `<div class="empty-note">No recognized skills found yet — try adding a Skills section with tools, languages, or platforms you know.</div>`;
+    return;
+  }
+  Object.entries(foundByCategory).forEach(([cat, skills]) => {
+    if (skills.length === 0) return;
+    const group = document.createElement('div');
+    group.className = 'pill-group';
+    group.innerHTML = `<div class="cat">${cat}</div><div class="pills">${skills.map(s => `<span class="pill">${s}</span>`).join('')}</div>`;
+    wrap.appendChild(group);
+  });
+}
+
+function renderMissing(targetData, role){
+  document.getElementById('missingSub').textContent = `Compared against typical ${role} keywords`;
+  const wrap = document.getElementById('missingList');
+  wrap.innerHTML = "";
+  if (targetData.missing.length === 0){
+    wrap.innerHTML = `<div class="empty-note">🎉 You've covered every common keyword for this role!</div>`;
+    return;
+  }
+  targetData.missing.forEach(k => {
+    const el = document.createElement('span');
+    el.className = 'missing-pill';
+    el.textContent = k;
+    wrap.appendChild(el);
+  });
+}
+
+function renderMatch(sortedRoles, bestRole){
+  const wrap = document.getElementById('matchList');
+  wrap.innerHTML = "";
+  sortedRoles.forEach(([role, data]) => {
+    const row = document.createElement('div');
+    row.className = 'role-row' + (role === bestRole ? ' best' : '');
+    row.innerHTML = `
+      <div class="top"><span>${role}${role === bestRole ? '<span class="best-tag">BEST FIT</span>':''}</span><span>${data.pct}%</span></div>
+      <div class="bar-track"><div class="bar-fill" style="width:${data.pct}%"></div></div>
+    `;
+    wrap.appendChild(row);
+  });
+}
+
+function renderSuggestions(suggestions){
+  const wrap = document.getElementById('suggestList');
+  wrap.innerHTML = "";
+  suggestions.forEach(s => {
+    const row = document.createElement('div');
+    row.className = 'suggestion';
+    row.innerHTML = `<span class="icon">${s.icon}</span><span class="txt">${s.txt}</span>`;
+    wrap.appendChild(row);
+  });
+}
+
+/* =========================================================
+   MAIN
+   ========================================================= */
+const analyzeBtn = document.getElementById('analyzeBtn');
+analyzeBtn.addEventListener('click', () => {
+  const text = document.getElementById('resumeText').value.trim();
+  if (text.length < 20){
+    alert("Paste a bit more of your résumé first — at least a few lines! 📝");
+    return;
+  }
+  const originalLabel = analyzeBtn.innerHTML;
+  analyzeBtn.innerHTML = '<span class="spin">🖇️</span> Analyzing...';
+  analyzeBtn.disabled = true;
+
+  setTimeout(() => {
+    const result = analyze(text);
+    renderScore(result.finalScore);
+    renderATS(result.atsChecks);
+    renderSkills(result.foundByCategory, result.totalFound.length);
+    renderMissing(result.targetData, selectedRole);
+    renderMatch(result.sortedRoles, result.bestRole);
+    renderSuggestions(result.suggestions);
+
+    document.getElementById('results').classList.add('show');
+    document.getElementById('results').scrollIntoView({behavior:'smooth', block:'start'});
+
+    analyzeBtn.innerHTML = originalLabel;
+    analyzeBtn.disabled = false;
+  }, 500);
+});
+</script>
+</body>
+</html>
