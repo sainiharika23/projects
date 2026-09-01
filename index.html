@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>♟️ Chess: The Game of Kings ♟️</title>
+    <link rel="stylesheet" href="chesscss.css">
+    <style>
+        body {
+            margin: 0;
+            padding-top: 80px; /* Prevents overlap with navbar */
+            text-align: center;
+            background-color: #121212; /* Dark theme */
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+
+        nav {
+            background: black;
+            padding: 15px;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 100;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        nav ul li {
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+        }
+
+        .hero {
+            padding: 50px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            margin: 20px;
+            box-shadow: 0px 0px 10px white;
+        }
+
+        .hero h1 {
+            font-size: 36px;
+            color: #ffcc00; /* Gold color */
+            text-shadow: 2px 2px black;
+        }
+
+        .hero p {
+            font-size: 18px;
+        }
+
+        .btn {
+            background: #ffcc00;
+            color: black;
+            padding: 10px 20px;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 5px;
+            margin: 10px;
+        }
+
+        .history, .pieces {
+            margin: 30px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px white;
+        }
+
+        .history img, .pieces img {
+            width: 100%;
+            max-width: 400px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px white;
+        }
+
+        footer {
+            margin-top: 30px;
+            padding: 10px;
+            background-color: #333;
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <ul>
+            <li><a href="index.html">🏠 Home</a></li>
+            <li><a href="rules.html">📜 Rules</a></li>
+            <li><a href="players.html">🏅 Players</a></li>
+            <li><a href="strategies.html">🎯 Strategies</a></li>
+        </ul>
+    </nav>
+
+    <header class="hero">
+        <h1>♟️ Welcome to the World of Chess ♟️</h1>
+        <p>Master the art of strategy, tactics, and brilliance in the game of kings.</p>
+        <a href="rules.html" class="btn">Learn Chess Rules 📜</a>
+    </header>
+    <section class="history">
+        <h2>📖 History of Chess</h2>
+        <p>Chess originated in India around the 6th century as Chaturanga. Over the centuries, it evolved through Persia, the Arab world, and Europe, becoming the game we know today.</p>
+        <img src="C:\Users\snb04\Downloads\history chess.jpeg" alt="Chess History">
+    </section>
+
+    <section class="pieces">
+        <h2>♜ Chess Pieces ♞</h2>
+        <img src="C:\Users\snb04\Downloads\chess.png" alt="Chess Pieces">
+        <p>Each player starts with 16 pieces:<br> 1 King, 1 Queen, 2 Rooks, 2 Bishops, 2 Knights, and 8 Pawns.</br></p>
+    </section>
+
+    <div class="next-page">
+        <a href="rules.html" class="btn">Next Page ➡️</a>
+    </div>
+
+    <footer>
+        <p>♟️ © 2025 Chess World. All Rights Reserved. ♟️</p>
+    </footer>
+
+</body>
+</html>
