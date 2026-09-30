@@ -1,0 +1,468 @@
+{
+  "users": [
+    {
+      "id": "u_admin",
+      "name": "Priya Admin",
+      "email": "admin@pinkustudysphere.com",
+      "password": "hxhqjdt",
+      "role": "admin",
+      "createdAt": 1790757847957,
+      "avatarColor": "#C93F7A"
+    },
+    {
+      "id": "u_student",
+      "name": "Aditi Sharma",
+      "email": "student@pinkustudysphere.com",
+      "password": "h4iro8j",
+      "role": "student",
+      "createdAt": 1790757847957,
+      "avatarColor": "#3E9C82"
+    }
+  ],
+  "courses": [
+    {
+      "id": "c_webdev",
+      "title": "Full-Stack Web Development Bootcamp",
+      "category": "Web Development",
+      "instructor": "Rhea Kapoor",
+      "level": "Beginner",
+      "price": 1499,
+      "thumbIcon": "💻",
+      "thumbColor": "linear-gradient(135deg,#FF6FA3,#C93F7A)",
+      "description": "Go from zero to deploying real websites. Learn HTML, CSS, JavaScript, and how to structure a modern front-end project, with hands-on projects at every stage.",
+      "modules": [
+        {
+          "id": "m1",
+          "title": "Foundations of the Web",
+          "lessons": [
+            {
+              "id": "l1",
+              "title": "How the Web Works",
+              "duration": "08:12",
+              "type": "video"
+            },
+            {
+              "id": "l2",
+              "title": "Setting Up Your Dev Environment",
+              "duration": "06:40",
+              "type": "video"
+            },
+            {
+              "id": "l3",
+              "title": "HTML Structure & Semantics",
+              "duration": "12:05",
+              "type": "video"
+            }
+          ]
+        },
+        {
+          "id": "m2",
+          "title": "Styling with CSS",
+          "lessons": [
+            {
+              "id": "l4",
+              "title": "Box Model & Layout",
+              "duration": "10:30",
+              "type": "video"
+            },
+            {
+              "id": "l5",
+              "title": "Flexbox in Practice",
+              "duration": "14:22",
+              "type": "video"
+            },
+            {
+              "id": "l6",
+              "title": "Responsive Design Reading",
+              "duration": "6 min read",
+              "type": "reading"
+            }
+          ]
+        },
+        {
+          "id": "m3",
+          "title": "JavaScript Essentials",
+          "lessons": [
+            {
+              "id": "l7",
+              "title": "Variables & Functions",
+              "duration": "11:15",
+              "type": "video"
+            },
+            {
+              "id": "l8",
+              "title": "DOM Manipulation",
+              "duration": "13:48",
+              "type": "video"
+            }
+          ]
+        }
+      ],
+      "materials": [
+        {
+          "id": "mt1",
+          "name": "Course Syllabus.pdf",
+          "type": "PDF",
+          "size": "240 KB"
+        },
+        {
+          "id": "mt2",
+          "name": "HTML Cheat Sheet.pdf",
+          "type": "PDF",
+          "size": "180 KB"
+        },
+        {
+          "id": "mt3",
+          "name": "Starter Code.zip",
+          "type": "ZIP",
+          "size": "1.1 MB"
+        }
+      ],
+      "createdAt": 1790757847957
+    },
+    {
+      "id": "c_uiux",
+      "title": "UI/UX Design for Beginners",
+      "category": "Design",
+      "instructor": "Kabir Mehta",
+      "level": "Beginner",
+      "price": 999,
+      "thumbIcon": "🎨",
+      "thumbColor": "linear-gradient(135deg,#F4B860,#C93F7A)",
+      "description": "Learn the principles of user-centred design, wireframing, and prototyping. Build a polished portfolio case study by the end of the course.",
+      "modules": [
+        {
+          "id": "m1",
+          "title": "Design Thinking",
+          "lessons": [
+            {
+              "id": "l1",
+              "title": "What is UX?",
+              "duration": "07:50",
+              "type": "video"
+            },
+            {
+              "id": "l2",
+              "title": "User Research Basics",
+              "duration": "09:12",
+              "type": "video"
+            }
+          ]
+        },
+        {
+          "id": "m2",
+          "title": "Wireframing & Prototyping",
+          "lessons": [
+            {
+              "id": "l3",
+              "title": "Low-Fidelity Wireframes",
+              "duration": "10:05",
+              "type": "video"
+            },
+            {
+              "id": "l4",
+              "title": "Prototyping Tools Overview",
+              "duration": "5 min read",
+              "type": "reading"
+            }
+          ]
+        }
+      ],
+      "materials": [
+        {
+          "id": "mt1",
+          "name": "Wireframe Templates.zip",
+          "type": "ZIP",
+          "size": "860 KB"
+        },
+        {
+          "id": "mt2",
+          "name": "Design Checklist.pdf",
+          "type": "PDF",
+          "size": "120 KB"
+        }
+      ],
+      "createdAt": 1790757847957
+    },
+    {
+      "id": "c_python",
+      "title": "Python for Data Analysis",
+      "category": "Data Science",
+      "instructor": "Ananya Rao",
+      "level": "Intermediate",
+      "price": 1299,
+      "thumbIcon": "📊",
+      "thumbColor": "linear-gradient(135deg,#6FB3E0,#3E9C82)",
+      "description": "Master Python fundamentals and use Pandas, NumPy, and Matplotlib to clean, analyse, and visualise real-world datasets.",
+      "modules": [
+        {
+          "id": "m1",
+          "title": "Python Basics",
+          "lessons": [
+            {
+              "id": "l1",
+              "title": "Syntax & Data Types",
+              "duration": "09:40",
+              "type": "video"
+            },
+            {
+              "id": "l2",
+              "title": "Loops & Functions",
+              "duration": "11:02",
+              "type": "video"
+            }
+          ]
+        },
+        {
+          "id": "m2",
+          "title": "Working with Data",
+          "lessons": [
+            {
+              "id": "l3",
+              "title": "Intro to Pandas",
+              "duration": "15:30",
+              "type": "video"
+            },
+            {
+              "id": "l4",
+              "title": "Data Visualisation",
+              "duration": "12:18",
+              "type": "video"
+            }
+          ]
+        }
+      ],
+      "materials": [
+        {
+          "id": "mt1",
+          "name": "Dataset Pack.zip",
+          "type": "ZIP",
+          "size": "2.3 MB"
+        },
+        {
+          "id": "mt2",
+          "name": "Pandas Reference.pdf",
+          "type": "PDF",
+          "size": "310 KB"
+        }
+      ],
+      "createdAt": 1790757847957
+    },
+    {
+      "id": "c_marketing",
+      "title": "Digital Marketing Fundamentals",
+      "category": "Marketing",
+      "instructor": "Neha Joshi",
+      "level": "Beginner",
+      "price": 799,
+      "thumbIcon": "📣",
+      "thumbColor": "linear-gradient(135deg,#7FCFB4,#6FB3E0)",
+      "description": "Understand SEO, social media, and email marketing strategies to grow an audience and measure real results.",
+      "modules": [
+        {
+          "id": "m1",
+          "title": "Marketing Foundations",
+          "lessons": [
+            {
+              "id": "l1",
+              "title": "The Marketing Funnel",
+              "duration": "08:20",
+              "type": "video"
+            },
+            {
+              "id": "l2",
+              "title": "Know Your Audience",
+              "duration": "07:44",
+              "type": "video"
+            }
+          ]
+        },
+        {
+          "id": "m2",
+          "title": "Channels & Tactics",
+          "lessons": [
+            {
+              "id": "l3",
+              "title": "SEO Basics",
+              "duration": "10:55",
+              "type": "video"
+            },
+            {
+              "id": "l4",
+              "title": "Email Campaigns Reading",
+              "duration": "4 min read",
+              "type": "reading"
+            }
+          ]
+        }
+      ],
+      "materials": [
+        {
+          "id": "mt1",
+          "name": "Campaign Planner.pdf",
+          "type": "PDF",
+          "size": "150 KB"
+        }
+      ],
+      "createdAt": 1790757847957
+    },
+    {
+      "id": "c_photo",
+      "title": "Photography Basics: Shoot Like a Pro",
+      "category": "Photography",
+      "instructor": "Vikram Nair",
+      "level": "Beginner",
+      "price": 699,
+      "thumbIcon": "📷",
+      "thumbColor": "linear-gradient(135deg,#C93F7A,#3B2545)",
+      "description": "Understand your camera, composition, and lighting to take striking photos with any equipment you already own.",
+      "modules": [
+        {
+          "id": "m1",
+          "title": "Camera Basics",
+          "lessons": [
+            {
+              "id": "l1",
+              "title": "Aperture, Shutter, ISO",
+              "duration": "09:05",
+              "type": "video"
+            },
+            {
+              "id": "l2",
+              "title": "Composition Rules",
+              "duration": "08:33",
+              "type": "video"
+            }
+          ]
+        }
+      ],
+      "materials": [
+        {
+          "id": "mt1",
+          "name": "Settings Cheat Sheet.pdf",
+          "type": "PDF",
+          "size": "95 KB"
+        }
+      ],
+      "createdAt": 1790757847957
+    },
+    {
+      "id": "c_business",
+      "title": "Business Communication Mastery",
+      "category": "Business",
+      "instructor": "Sanjana Iyer",
+      "level": "Intermediate",
+      "price": 899,
+      "thumbIcon": "💼",
+      "thumbColor": "linear-gradient(135deg,#F4B860,#7FCFB4)",
+      "description": "Write clearer emails, run better meetings, and present with confidence — practical skills for any workplace.",
+      "modules": [
+        {
+          "id": "m1",
+          "title": "Written Communication",
+          "lessons": [
+            {
+              "id": "l1",
+              "title": "Writing Clear Emails",
+              "duration": "07:15",
+              "type": "video"
+            },
+            {
+              "id": "l2",
+              "title": "Reports & Summaries",
+              "duration": "6 min read",
+              "type": "reading"
+            }
+          ]
+        },
+        {
+          "id": "m2",
+          "title": "Verbal Communication",
+          "lessons": [
+            {
+              "id": "l3",
+              "title": "Running Effective Meetings",
+              "duration": "09:48",
+              "type": "video"
+            }
+          ]
+        }
+      ],
+      "materials": [
+        {
+          "id": "mt1",
+          "name": "Email Templates.zip",
+          "type": "ZIP",
+          "size": "210 KB"
+        }
+      ],
+      "createdAt": 1790757847957
+    }
+  ],
+  "enrollments": [
+    {
+      "id": "en_munuziqezjzk6w",
+      "userId": "u_student",
+      "courseId": "c_webdev",
+      "enrolledAt": 1790239447957,
+      "completedLessonIds": [
+        "l1",
+        "l2",
+        "l3",
+        "l4"
+      ],
+      "completed": false,
+      "certificateIssued": false
+    },
+    {
+      "id": "en_munuziqftkjyi5",
+      "userId": "u_student",
+      "courseId": "c_uiux",
+      "enrolledAt": 1790585047957,
+      "completedLessonIds": [
+        "l1",
+        "l2",
+        "l3",
+        "l4"
+      ],
+      "completed": true,
+      "certificateIssued": true,
+      "completedAt": 1790671447957
+    }
+  ],
+  "notifications": [
+    {
+      "id": "nt_munuziqf0qagv3",
+      "userId": "u_student",
+      "type": "welcome",
+      "message": "Welcome to PinkuStudySphere! Start your first course today.",
+      "date": 1790239447957,
+      "read": true
+    },
+    {
+      "id": "nt_munuziqfb0vg8o",
+      "userId": "u_student",
+      "type": "progress",
+      "message": "You completed \"UI/UX Design for Beginners\" — certificate ready!",
+      "date": 1790671447957,
+      "read": false
+    },
+    {
+      "id": "nt_munuziqfo2igzc",
+      "userId": "u_student",
+      "type": "reminder",
+      "message": "You are 3 lessons away from finishing \"Full-Stack Web Development Bootcamp\".",
+      "date": 1790754247957,
+      "read": false
+    },
+    {
+      "id": "nt_munuziqf3xio9e",
+      "userId": "u_admin",
+      "type": "system",
+      "message": "2 students enrolled in your courses this week.",
+      "date": 1790750647957,
+      "read": false
+    }
+  ],
+  "resetTokens": []
+}
